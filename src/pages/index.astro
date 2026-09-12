@@ -1,0 +1,344 @@
+---
+import Layout from '../layouts/Layout.astro';
+import YouTubeLink from '../components/YouTubeLink.astro';
+import PortfolioIcon from '~icons/carbon/portfolio';
+import HelpIcon from '~icons/carbon/help';
+import stylesData from '../../public/data/styles.json';
+
+// Get all preview images from all styles
+const allPreviews = stylesData.categories.flatMap(cat => 
+  cat.styles.flatMap(style => style.previews)
+);
+
+// Select 12 images for the hero grid (shuffled for variety)
+const heroImages = [...allPreviews].sort(() => 0.5 - Math.random()).slice(0, 12);
+
+// Split into 3 columns of 4 images
+const columns = [
+  heroImages.slice(0, 4),
+  heroImages.slice(4, 8),
+  heroImages.slice(8, 12),
+];
+---
+
+<Layout category="landing">
+  <main id="landing">
+    <!-- Hero Section -->
+    <section class="landing-hero">
+      <div class="hero-bg-grid">
+        <div class="hero-bg-grid__track">
+          {columns.map((col, idx) => (
+            <div class={`hero-bg-grid__col ${idx % 2 !== 0 ? 'hero-bg-grid__col--reverse' : ''}`}>
+              {col.map(img => (
+                <img src={img} alt="" loading="lazy" />
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="landing-hero__container">
+        <div class="hero-content-box hero-entrance">
+          <div class="hero-content-inner">
+            <h1 class="landing-hero__title" data-i18n="landingHeroTitle">اسلایدهای خود را با مدرسه هوش مصنوعی یاس ارتقا دهید</h1>
+            <p class="landing-hero__subtitle" data-i18n="landingHeroSub">مجموعه کامل و برگزیده پرامپت‌های حرفه‌ای YAML به همت جعفر قربانی برای ارائه‌های تأثیرگذار با NotebookLM.</p>
+            <div class="landing-hero__actions">
+              <a href="/styles" class="btn btn--primary">
+                <PortfolioIcon class="btn__icon" />
+                <span data-i18n="landingCtaBtn">کاوش در گالری</span>
+              </a>
+              <a href="#how-it-works" class="btn btn--secondary">
+                <HelpIcon class="btn__icon" />
+                <span data-i18n="landingHowItWorks">نحوه کارکرد</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      .landing-hero {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: var(--color-bg);
+      }
+
+      .hero-bg-grid {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        opacity: 0.9;
+        transform: scale(1.02);
+        mask-image: linear-gradient(
+          to bottom,
+          transparent 0%,
+          black 15%,
+          black 85%,
+          transparent 100%
+        );
+        -webkit-mask-image: linear-gradient(
+          to bottom,
+          transparent 0%,
+          black 15%,
+          black 85%,
+          transparent 100%
+        );
+      }
+
+      .hero-bg-grid__track {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-xs);
+        height: 100%;
+      }
+
+      .hero-bg-grid__col {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+        animation: scroll-up 120s linear infinite;
+        will-change: transform;
+      }
+
+      .hero-bg-grid__col--reverse {
+        animation: scroll-down 120s linear infinite;
+      }
+
+      .hero-bg-grid img {
+        width: 100%;
+        aspect-ratio: 16/9;
+        object-fit: cover;
+        border-radius: 0;
+        background: #eee;
+        border: 1px solid rgba(255,255,255,0.1);
+      }
+
+      @keyframes scroll-up {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-50%); }
+      }
+
+      @keyframes scroll-down {
+        0% { transform: translateY(-50%); }
+        100% { transform: translateY(0); }
+      }
+
+      .landing-hero__container {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 720px;
+        padding: 0 var(--space-lg);
+      }
+
+      .hero-entrance {
+        animation: heroEntrance 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      }
+
+      @keyframes heroEntrance {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+          filter: blur(15px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+          filter: blur(0);
+        }
+      }
+
+      .hero-content-box {
+        background: #fff;
+        padding: var(--space-3xl) var(--space-2xl);
+        border-radius: 10px;
+        position: relative;
+        box-shadow: 
+          inset 0 0 100px rgba(255,255,255,1),
+          inset 0 0 40px rgba(0,0,0,0.02),
+          0 0 0 20px #fff; 
+        border: 1px solid rgba(0,0,0,0.05);
+      }
+
+      .hero-content-inner {
+        position: relative;
+        z-index: 2;
+      }
+
+      .landing-hero__title {
+        font-size: clamp(2.25rem, 7vw, 3.75rem);
+        line-height: 0.95;
+        margin-bottom: var(--space-lg);
+        color: #2b2b2b;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+      }
+
+      .landing-hero__subtitle {
+        font-size: 1.125rem;
+        color: #666;
+        margin-bottom: var(--space-2xl);
+        max-width: 540px;
+        margin-left: auto;
+        margin-right: auto;
+        font-weight: 500;
+        line-height: 1.45;
+      }
+
+      .landing-hero__actions {
+        display: flex;
+        gap: var(--space-md);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .btn__icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+        flex-shrink: 0;
+      }
+
+      .btn--primary {
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      }
+
+      @media (max-width: 768px) {
+        .landing-hero {
+          height: auto;
+          padding: var(--space-4xl) 0;
+          min-height: 80vh;
+        }
+        .hero-bg-grid__track {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 4px;
+        }
+        .hero-content-box {
+          padding: var(--space-2xl) var(--space-lg);
+          box-shadow: 
+            inset 0 0 30px rgba(0,0,0,0.05),
+            0 0 0 15px #fff;
+        }
+        .landing-hero__title {
+          font-size: 2.2rem;
+          letter-spacing: -0.04em;
+        }
+        .landing-hero__subtitle {
+          font-size: 1.1rem;
+          margin-bottom: var(--space-xl);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .landing-hero {
+          padding: var(--space-3xl) 0;
+        }
+        .hero-content-box {
+          padding: var(--space-xl) var(--space-md);
+          box-shadow: 
+            inset 0 0 20px rgba(0,0,0,0.05),
+            0 0 0 10px #fff;
+        }
+        .landing-hero__title {
+          font-size: 1.8rem;
+        }
+        .landing-hero__actions {
+          flex-direction: column;
+          gap: var(--space-sm);
+        }
+        .landing-hero__actions .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+      .how-it-works-video {
+        margin-top: var(--space-3xl);
+      }
+    </style>
+
+    <!-- Examples Section -->
+    <section class="landing-section">
+      <div class="landing-section__container">
+        <h2 class="landing-section__title" data-i18n="landingExamplesTitle">نمونه‌های برگزیده</h2>
+        <div id="featured-grid" class="bento-grid">
+          <!-- Featured cards will be injected by app.js -->
+        </div>
+        <div class="landing-section__footer">
+          <a href="/styles" class="btn btn--outline" data-i18n="loadMore">مشاهده همه استایل‌ها</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="landing-section landing-section--alt">
+      <div class="landing-section__container">
+        <h2 class="landing-section__title" data-i18n="landingHowItWorks">نحوه کارکرد</h2>
+        <div class="how-it-works-grid">
+          <div class="how-card">
+            <div class="how-card__number">۰۱</div>
+            <h3 class="how-card__title" data-i18n="step1Title">۱. انتخاب استایل</h3>
+            <p class="how-card__desc" data-i18n="step1Desc">مجموعه را مرور کنید و کد YAML استایل مورد علاقه خود را کپی نمایید.</p>
+          </div>
+          <div class="how-card">
+            <div class="how-card__number">۰۲</div>
+            <h3 class="how-card__title" data-i18n="step4Title">۲. الصاق پرامپت</h3>
+            <p class="how-card__desc" data-i18n="step4Desc">کد YAML کپی‌شده را در کادر دستورالعمل‌های سفارشی نوت‌بوک در استودیو الصاق کنید.</p>
+          </div>
+          <div class="how-card">
+            <div class="how-card__number">۰۳</div>
+            <h3 class="how-card__title" data-i18n="step5Title">۳. تولید اسلاید</h3>
+            <p class="how-card__desc" data-i18n="step5Desc">روی دکمه 'Generate' کلیک کنید تا هوش مصنوعی منابع شما را به اسلایدی زیبا تبدیل کند.</p>
+          </div>
+        </div>
+
+        <YouTubeLink 
+          class="how-it-works-video" 
+          href="https://youtu.be/x3vWKEqKBpY"
+          resultHref="/samples/demo_notebooklm_prompt_styles.pdf"
+        />
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="landing-section">
+      <div class="landing-section__container landing-section__container--narrow">
+        <h2 class="landing-section__title" data-i18n="landingFaqTitle">سوالی دارید؟ ما پاسخ می‌دهیم</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary class="faq-item__question" data-i18n="faqQ1">این پرامپت‌های YAML چه هستند؟</summary>
+            <div class="faq-item__answer" data-i18n="faqA1">این‌ها بلوک‌های تنظیماتی ساختاریافته‌ای هستند که به هوش مصنوعی NotebookLM دستور می‌دهند اسلایدهای شما را دقیقاً طبق ترکیب رنگ، تایپوگرافی و عناصر گرافیکی مشخص طراحی کند.</div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-item__question" data-i18n="faqQ2">آیا استفاده از این استایل‌ها رایگان است؟</summary>
+            <div class="faq-item__answer" data-i18n="faqA2">بله، این پروژه یک ابتکار آموزشی و متن‌باز از سوی مدرسه هوش مصنوعی یاس و جعفر قربانی است و تمام پرامپت‌ها رایگان هستند.</div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-item__question" data-i18n="faqQ3">آیا می‌توانم استایل‌های خود را به اشتراک بگذارم؟</summary>
+            <div class="faq-item__answer" data-i18n="faqA3">بله! می‌توانید از طریق راهنمای مشارکت، استایل‌های اختصاصی خود را به این مجموعه اضافه کنید.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Video CTA Section -->
+    <section class="cta-video-section">
+      <div class="video-bg">
+        <video autoplay muted loop playsinline class="video-bg__content">
+          <source src="/videos/presentation-notebooklm-prompt-styles.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="video-overlay"></div>
+      <div class="cta-video-section__content">
+        <h2 class="cta-video-section__title" data-i18n="landingVideoCtaTitle">آماده‌اید روند کاری خود را متحول کنید؟</h2>
+        <p class="cta-video-section__subtitle" data-i18n="landingVideoCtaSub">با پرامپت‌های تخصصی مدرسه هوش مصنوعی یاس، کیفیت ساخت اسلایدهای خود را به اوج برسانید.</p>
+        <a href="/styles" class="btn btn--primary btn--large" data-i18n="landingVideoCtaBtn">هم‌اکنون شروع کنید</a>
+      </div>
+    </section>
+  </main>
+</Layout>

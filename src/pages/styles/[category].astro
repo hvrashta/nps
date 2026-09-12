@@ -1,0 +1,40 @@
+---
+import Layout from '../../layouts/Layout.astro';
+// We import the generated JSON to know which pages to generate
+import stylesData from '../../../public/data/styles.json';
+
+export function getStaticPaths() {
+  return stylesData.categories.map(cat => ({
+    params: { category: cat.id },
+    props: { name: cat.name }
+  }));
+}
+
+const { category } = Astro.params;
+const { name } = Astro.props;
+---
+
+<Layout category={category} title={`${name} — Yas AI School | Jafar Ghorbani`}>
+  <main id="app" data-category={category}>
+    <header class="hero">
+      <div class="hero__container">
+        <h1 class="hero__title">{name}</h1>
+        <p class="hero__subtitle">
+          <span id="style-count">0</span> استایل انتخابی YAML در این دسته‌بندی
+        </p>
+      </div>
+    </header>
+
+    <section class="grid-section">
+      <div id="styles-grid" class="bento-grid"></div>
+
+      <div id="pagination" class="pagination" hidden>
+        <button id="load-more" class="load-more-btn" data-i18n="loadMore">مشاهده استایل‌های بیشتر</button>
+      </div>
+
+      <p id="empty-state" class="empty-state" hidden data-i18n="emptyState">
+        هنوز استایلی در این دسته‌بندی ثبت نشده است. به زودی سر بزنید.
+      </p>
+    </section>
+  </main>
+</Layout>

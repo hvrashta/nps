@@ -1,0 +1,241 @@
+---
+import Footer from '../components/Footer.astro';
+import FAQ from '../components/FAQ.astro';
+import SunIcon from '~icons/carbon/sun';
+import MoonIcon from '~icons/carbon/moon';
+import PreloaderIcon from '../components/PreloaderIcon.astro';
+
+interface Props {
+  title?: string;
+  category?: string;
+}
+
+const { title = "Yas AI School — NotebookLM Slide Styles | Curated by Jafar Ghorbani", category = "all" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="author" content="Jafar Ghorbani / Yas AI School">
+  <meta name="description" content="A curated collection of visual design styles by Jafar Ghorbani / Yas AI School for NotebookLM slide generation. Browse, preview, and copy YAML prompts.">
+  <meta name="google-site-verification" content="2UF3L_fQMu61h2rfdzqpw1tDhVwaZpAArh1o_1N4e3c" />
+  
+  <!-- Open Graph / Social Media Meta Tags -->
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content="A curated collection of visual design styles by Jafar Ghorbani / Yas AI School for NotebookLM slide generation. Browse, preview, and copy YAML prompts.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://notebooklm-prompt-styles.vercel.app/">
+  <meta property="og:image" content="https://notebooklm-prompt-styles.vercel.app/og-image.png">
+  <meta property="og:site_name" content="Yas AI School — Jafar Ghorbani">
+  <meta property="og:logo" content="https://notebooklm-prompt-styles.vercel.app/icon.png" />
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={title}>
+  <meta property="twitter:domain" content="notebooklm-prompt-styles.vercel.app">
+  <meta name="twitter:description" content="A curated collection of visual design styles by Jafar Ghorbani / Yas AI School for NotebookLM slide generation. Browse, preview, and copy YAML prompts.">
+  <meta name="twitter:image" content="https://notebooklm-prompt-styles.vercel.app/og-image.png">
+  <meta property="twitter:url" content="https://notebooklm-prompt-styles.vercel.app/">
+  
+  <script is:inline>
+    const theme = (() => {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
+    })();
+
+    if (theme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+    window.localStorage.setItem('theme', theme);
+  </script>
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <slot name="head" />
+</head>
+<body>
+  <div id="preloader" class="preloader">
+    <script is:inline>
+      if (sessionStorage.getItem('preloaderShown')) {
+        document.getElementById('preloader').style.display = 'none';
+      }
+    </script>
+    <div class="preloader__content">
+      <div class="preloader__icon-wrapper">
+        <PreloaderIcon />
+      </div>
+    </div>
+  </div>
+
+  <slot />
+
+  <!-- YAML Bottom Sheet (Mobile) -->
+  <div id="bottom-sheet" class="bottom-sheet" hidden>
+    <div class="bottom-sheet__backdrop"></div>
+    <div class="bottom-sheet__panel">
+      <div class="bottom-sheet__handle"></div>
+      <div class="bottom-sheet__header">
+        <h3 id="sheet-title" class="bottom-sheet__title"></h3>
+        <button id="sheet-close" class="bottom-sheet__close" aria-label="Close">&times;</button>
+      </div>
+      <div class="bottom-sheet__code-wrapper">
+        <pre class="bottom-sheet__code"><code id="sheet-yaml"></code></pre>
+      </div>
+      <button id="sheet-copy" class="copy-btn">
+        <span class="copy-btn__icon">⎘</span>
+        <span class="copy-btn__text" data-i18n="sheetCopy">Copy YAML</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- YAML Tooltip (Desktop) -->
+  <div id="yaml-tooltip" class="yaml-tooltip" hidden>
+    <pre class="yaml-tooltip__code"><code id="tooltip-yaml"></code></pre>
+    <button id="tooltip-copy" class="copy-btn copy-btn--small">
+      <span class="copy-btn__icon">⎘</span>
+      <span class="copy-btn__text" data-i18n="sheetCopy">Copy Style</span>
+    </button>
+  </div>
+
+  <!-- Navigation Modal -->
+  <div id="nav-modal" class="nav-modal" hidden>
+    <div class="nav-modal__backdrop"></div>
+    <nav class="nav-modal__panel">
+      <ul id="nav-list" class="nav-modal__list"></ul>
+    </nav>
+  </div>
+
+  <!-- Floating Menu Button -->
+  <button id="nav-trigger" class="fab" aria-label="Navigation menu">
+    <span class="fab__lines">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+  </button>
+
+  <!-- Top Right Actions -->
+  <div class="top-actions">
+    <button id="theme-toggle" class="action-btn" aria-label="Toggle dark mode">
+      <div class="theme-toggle__icons">
+        <SunIcon class="theme-toggle__sun" />
+        <MoonIcon class="theme-toggle__moon" />
+      </div>
+    </button>
+
+    <!-- Language Selector -->
+    <div class="lang-selector">
+      <button id="lang-trigger" class="action-btn lang-trigger" aria-label="Change language">
+        <span id="current-lang-code" class="lang-code">🇮🇷</span>
+      </button>
+      <div id="lang-menu" class="lang-menu" hidden>
+        <button data-lang="fa" class="lang-menu__item">
+          <span class="lang-menu__flag">🇮🇷</span>
+          <span class="lang-menu__name">فارسی</span>
+        </button>
+        <button data-lang="en" class="lang-menu__item">
+          <span class="lang-menu__flag">🇺🇸</span>
+          <span class="lang-menu__name">English</span>
+        </button>
+        <button data-lang="es" class="lang-menu__item">
+          <span class="lang-menu__flag">🇪🇸</span>
+          <span class="lang-menu__name">Español</span>
+        </button>
+        <button data-lang="pt" class="lang-menu__item">
+          <span class="lang-menu__flag">🇧🇷</span>
+          <span class="lang-menu__name">Português</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Social Hub -->
+    <div class="social-hub">
+      <button id="social-trigger" class="action-btn social-trigger" aria-label="Share and Social" data-i18n-aria="shareTitle">
+        <img src="/icons/share.svg" alt="" class="action-btn__icon">
+      </button>
+
+      <div class="social-desktop">
+        <a href="https://github.com/hvrashta/nps" target="_blank" rel="noopener" class="action-btn" aria-label="GitHub Repository">
+          <img src="/icons/github.svg" alt="" class="action-btn__icon">
+        </a>
+        <a id="share-linkedin" href="#" target="_blank" rel="noopener" class="action-btn" aria-label="Share on LinkedIn">
+          <img src="/icons/linkedin.svg" alt="" class="action-btn__icon">
+        </a>
+        <a id="share-reddit" href="#" target="_blank" rel="noopener" class="action-btn" aria-label="Share on Reddit">
+          <img src="/icons/reddit.svg" alt="" class="action-btn__icon">
+        </a>
+        <a id="share-x" href="#" target="_blank" rel="noopener" class="action-btn" aria-label="Share on X">
+          <img src="/icons/x.svg" alt="" class="action-btn__icon">
+        </a>
+        <button id="copy-trigger" class="action-btn" aria-label="Copy link">
+          <img src="/icons/share.svg" alt="" class="action-btn__icon">
+        </button>
+      </div>
+    </div>
+
+    <button id="fav-trigger" class="fab-fav" aria-label="Show favorites">
+      <span class="fab-fav__icon">♡</span>
+      <span id="fav-badge" class="fab-fav__badge">0</span>
+    </button>
+  </div>
+
+  <!-- Social Modal (Mobile) -->
+  <div id="social-modal" class="social-modal" hidden>
+    <div class="social-modal__backdrop"></div>
+    <div class="social-modal__panel">
+      <h3 class="social-modal__title" data-i18n="shareTitle">Connect & Share</h3>
+      <div class="social-modal__grid">
+        <a href="https://github.com/hvrashta/nps" target="_blank" rel="noopener" class="social-modal__item">
+          <img src="/icons/github.svg" alt="" class="action-btn__icon">
+          <span>GitHub</span>
+        </a>
+        <a id="modal-linkedin" href="#" target="_blank" rel="noopener" class="social-modal__item">
+          <img src="/icons/linkedin.svg" alt="" class="action-btn__icon">
+          <span>LinkedIn</span>
+        </a>
+        <a id="modal-reddit" href="#" target="_blank" rel="noopener" class="social-modal__item">
+          <img src="/icons/reddit.svg" alt="" class="action-btn__icon">
+          <span>Reddit</span>
+        </a>
+        <a id="modal-x" href="#" target="_blank" rel="noopener" class="social-modal__item">
+          <img src="/icons/x.svg" alt="" class="action-btn__icon">
+          <span>X / Twitter</span>
+        </a>
+        <button id="modal-copy" class="social-modal__item">
+          <img src="/icons/share.svg" alt="" class="action-btn__icon">
+          <span data-i18n="copyLink">Copy Link</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <FAQ />
+  <Footer />
+
+  <!-- Toast -->
+  <div id="toast" class="toast" hidden>Copied to clipboard</div>
+
+  <style is:global>
+    @import "../styles/styles.css";
+  </style>
+
+  <script>
+    import "../scripts/app.js";
+  </script>
+</body>
+</html>

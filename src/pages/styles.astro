@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout category="all">
+  <main id="app" data-category="all">
+    <header class="hero">
+      <div class="hero__container">
+        <h1 class="hero__title" data-i18n="heroTitle">استایل‌های اسلاید NotebookLM</h1>
+        <p class="hero__subtitle">
+          <span id="style-count">0</span> <span data-i18n="heroSub">پرامپت‌های گلچین‌شده YAML توسط جعفر قربانی</span>
+        </p>
+      </div>
+    </header>
+
+    <section class="grid-section">
+      <div id="styles-grid" class="bento-grid"></div>
+      
+      <div id="pagination" class="pagination" hidden>
+        <button id="load-more" class="load-more-btn" data-i18n="loadMore">مشاهده استایل‌های بیشتر</button>
+      </div>
+
+      <p id="empty-state" class="empty-state" hidden data-i18n="emptyState">
+        هنوز استایلی با تصویر پیش‌نمایش در این دسته‌بندی قرار نگرفته است. به زودی سر بزنید.
+      </p>
+    </section>
+  </main>
+</Layout>

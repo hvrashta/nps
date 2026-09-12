@@ -1,0 +1,161 @@
+---
+import IconChevronDown from '~icons/carbon/chevron-down';
+
+const faqs = [
+  {
+    question: "استایل‌های اسلاید مدرسه هوش مصنوعی یاس چه هستند؟",
+    answer: "مجموعه‌ای منتخب از سبک‌های طراحی بصری است که توسط جعفر قربانی / مدرسه هوش مصنوعی یاس توسعه داده شده و به صورت پرامپت‌های استاندارد YAML فرمت‌بندی شده‌اند تا ارائه‌ها و اسلایدهای ساده NotebookLM را به ارائه‌هایی حرفه‌ای و چشم‌نواز تبدیل کنند."
+  },
+  {
+    question: "چگونه از این استایل‌ها استفاده کنم؟",
+    answer: "کافی است استایل مورد علاقه خود را انتخاب کرده، دکمه کپی کد YAML را بزنید و آن را در بخش دستورالعمل‌های سفارشی (Custom Instructions) یا بخش استایل در نوت‌بوک خود الصاق (Paste) نمایید."
+  },
+  {
+    question: "آیا استفاده از این استایل‌ها رایگان است؟",
+    answer: "بله! این پروژه یک ابتکار آموزشی و متن‌باز از سوی مدرسه هوش مصنوعی یاس و جعفر قربانی است و تمامی پرامپت‌ها به رایگان برای عموم در دسترس هستند."
+  },
+  {
+    question: "آیا می‌توانم استایل‌های خود را به این مجموعه اضافه کنم؟",
+    answer: "بله، ما از مشارکت جامعه فعالان هوش مصنوعی استقبال می‌کنیم. می‌توانید بر اساس راهنمای مشارکت، فایل تنظیمات YAML و تصویر پیش‌نمایش اسلاید خود را ارسال کنید."
+  },
+  {
+    question: "چگونه می‌توانم با مدرسه هوش مصنوعی یاس ارتباط برقرار کنم؟",
+    answer: "می‌توانید از طریق صفحه «درباره ما» با جعفر قربانی و فعالیت‌های آموزشی مدرسه هوش مصنوعی یاس آشنا شوید و در ارتباط باشید."
+  }
+];
+---
+
+<section class="faq">
+  <div class="container faq__container">
+    <div class="faq__header">
+      <h2 class="faq__title" data-i18n="faqTitle">پرسش‌های متداول</h2>
+      <p class="faq__subtitle" data-i18n="faqSub">هر آنچه برای استفاده از استایل‌های مدرسه هوش مصنوعی یاس نیاز دارید.</p>
+    </div>
+
+    <div class="faq__list">
+      {faqs.map((faq, index) => (
+        <details class="faq__item">
+          <summary class="faq__question">
+            <span>{faq.question}</span>
+            <IconChevronDown class="faq__icon" />
+          </summary>
+          <div class="faq__answer">
+            <p>{faq.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq {
+    padding: var(--space-4xl) 0;
+    background: var(--color-surface-soft);
+  }
+
+  .faq__container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+  }
+
+  .faq__header {
+    text-align: center;
+    margin-bottom: var(--space-3xl);
+  }
+
+  .faq__title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin-bottom: var(--space-sm);
+  }
+
+  .faq__subtitle {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+  }
+
+  .faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .faq__item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--duration-normal) var(--ease-spring);
+  }
+
+  .faq__item[open] {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .faq__question {
+    list-style: none;
+    padding: var(--space-lg) var(--space-xl);
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: background var(--duration-fast);
+  }
+
+  .faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__question:hover {
+    background: var(--color-surface-hover);
+  }
+
+  .faq__icon {
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+    transition: transform var(--duration-normal) var(--ease-spring);
+  }
+
+  .faq__item[open] .faq__icon {
+    transform: rotate(180deg);
+    color: var(--color-accent);
+  }
+
+  .faq__answer {
+    padding: 0 var(--space-xl) var(--space-lg);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    animation: slideDown 0.3s var(--ease-spring);
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .faq__title {
+      font-size: 2rem;
+    }
+    
+    .faq__question {
+      padding: var(--space-md) var(--space-lg);
+    }
+    
+    .faq__answer {
+      padding: 0 var(--space-lg) var(--space-md);
+    }
+  }
+</style>

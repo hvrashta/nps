@@ -1,0 +1,26 @@
+{
+  "name": "yas-ai-school-slide-styles",
+  "version": "1.0.0",
+  "description": "Showcase website for Yas AI School's NotebookLM Slide Styles collection curated by Jafar Ghorbani",
+  "author": "Jafar Ghorbani / Yas AI School",
+  "type": "module",
+  "scripts": {
+    "build:data": "node scripts/build-data.js",
+    "dev": "npm run build:data && astro dev",
+    "build": "npm run build:data && astro build && node scripts/flat-sitemap.js",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@iconify-json/carbon": "^1.2.20",
+    "unplugin-icons": "^23.0.1",
+    "vite": "^6.3.1",
+    "vitest": "^3.1.1"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
+    "astro": "^6.1.9",
+    "js-yaml": "^4.1.0"
+  }
+}

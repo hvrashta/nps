@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import YouTubeLink from '../components/YouTubeLink.astro';
 import PortfolioIcon from '~icons/carbon/portfolio';
 import HelpIcon from '~icons/carbon/help';
 import stylesData from '../../public/data/styles.json';
@@ -257,9 +256,6 @@ const columns = [
           justify-content: center;
         }
       }
-      .how-it-works-video {
-        margin-top: var(--space-3xl);
-      }
     </style>
 
     <!-- Examples Section -->
@@ -296,12 +292,6 @@ const columns = [
             <p class="how-card__desc" data-i18n="step5Desc">روی دکمه 'Generate' کلیک کنید تا هوش مصنوعی منابع شما را به اسلایدی زیبا تبدیل کند.</p>
           </div>
         </div>
-
-        <YouTubeLink 
-          class="how-it-works-video" 
-          href="https://youtu.be/x3vWKEqKBpY"
-          resultHref="/samples/demo_notebooklm_prompt_styles.pdf"
-        />
       </div>
     </section>
 
